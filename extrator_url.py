@@ -29,7 +29,7 @@ class ExtratorURL:
         indice_interrogacao = self.url.find('?')
         return self.url[indice_interrogacao+1:]
 
-    def get_valor_parametros(self, parametro_busca):
+    def get_valor_parametro(self, parametro_busca):
         indice_parametro = self.url.find(parametro_busca)
         indice_valor = indice_parametro + len(parametro_busca) + 1  # +1 para pular o '='
         indice_e_comercial = self.url.find('&', indice_valor)
@@ -38,7 +38,19 @@ class ExtratorURL:
         else:
             return self.url[indice_valor:indice_e_comercial]
 
+    def __len__(self):
+        return len(self.url)
 
-url = "https://www.bytebank.com/cambio?quantidade=100&moedaOrigem=real&moedaDestino=dolar"
-extrator = ExtratorURL(url)
-#print(extrator.get_valor_parametros('quantidade'))
+    def __str__(self):
+        return f'URL completa: {self.url}\nBase da URL: {self.get_url_base()}\nParâmetros: {self.get_url_parametros()}'
+
+    def __eq__(self, other):
+        return self.url == other.url
+
+if (__name__ == '__main__'):
+    url = "https://www.bytebank.com/cambio?quantidade=100&moedaOrigem=real&moedaDestino=dolar"
+    extrator = ExtratorURL(url)
+    extrator2 = ExtratorURL(url)
+    print(extrator == extrator2)
+    print(extrator is extrator2)
+    #print(extrator.get_valor_parametros('quantidade'))
